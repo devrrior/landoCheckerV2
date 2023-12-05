@@ -26,6 +26,7 @@ public class CodeEditorController {
         String code = codeField.getText();
         Stack<Prod> initialStack = checker.getInitialStack();
         outputField.getChildren().clear();
+        System.out.println("CHECKER: " + checker.separateElements(code));
         checker.setLogs(logs);
 
         boolean result = checker.check(code, initialStack, 0);
@@ -35,19 +36,16 @@ public class CodeEditorController {
         logsText.setFont(javafx.scene.text.Font.font("JetBrainsMonoNL NF Regular", 15));
         outputField.getChildren().add(logsText);
 
-        System.out.println("LOGS: " + checker.getLogs());
-
+        Text resultText;
         if (result) {
-            Text resultText = new Text("The code is correct");
+            resultText = new Text("The code is correct");
             resultText.setFill(javafx.scene.paint.Color.GREEN);
-            resultText.setFont(javafx.scene.text.Font.font("JetBrainsMonoNL NF Regular", 15));
-            outputField.getChildren().add(resultText);
         } else {
-            Text resultText = new Text("The code is incorrect");
+            resultText = new Text("The code is incorrect");
             resultText.setFill(javafx.scene.paint.Color.RED);
-            resultText.setFont(javafx.scene.text.Font.font("JetBrainsMonoNL NF Regular", 15));
-            outputField.getChildren().add(resultText);
         }
+        resultText.setFont(javafx.scene.text.Font.font("JetBrainsMonoNL NF Regular", 15));
+        outputField.getChildren().add(resultText);
     }
 
     @FXML
