@@ -132,7 +132,7 @@ public class Checker {
 
         Prod CO = new Prod();
         CO.setLabel("CO");
-        CO.setSymbols("continue");
+        CO.setSymbols("continuar");
         CO.setIsTerminal(true);
 
         // Varias letras y numeros
@@ -593,7 +593,7 @@ public class Checker {
 
         Stack<Prod> stack = new Stack<>();
         stack.push($);
-        stack.push(CON);
+        stack.push(GENERAL);
 
         return stack;
     }
@@ -704,7 +704,13 @@ public class Checker {
                     // Si se encuentra ':=', agrúpalo como un solo elemento
                     elements.add(":=");
                     i++; // Saltar al siguiente carácter después de '='
-                } else if ("=<>!".indexOf(ch) != -1) {
+                }
+                // si hay dos =, agruparlos
+                else if (ch == '=' && i < text.length() - 1 && text.charAt(i + 1) == '=') {
+                    elements.add("==");
+                    i++; // Saltar al siguiente carácter después de '='
+                }
+                else if ("=<>!".indexOf(ch) != -1) {
                     // Agrupar operadores adicionales como ==, <, >, <=, >=, !=
                     StringBuilder operator = new StringBuilder().append(ch);
                     while (i < text.length() - 1 && "=<>".indexOf(text.charAt(i + 1)) != -1) {
@@ -734,6 +740,14 @@ public class Checker {
 
         // Eliminar espacios en blanco
         elements.removeIf(String::isBlank);
+
+        // recorrer la lista, si hay dos =, agruparlos
+        for (int i = 0; i < elements.size(); i++) {
+            if (elements.get(i).equals("=") && i < elements.size() - 1 && elements.get(i + 1).equals("=")) {
+                elements.set(i, "==");
+                elements.remove(i + 1);
+            }
+        }
 
         return elements;
     }
